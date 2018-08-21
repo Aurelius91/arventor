@@ -24,6 +24,11 @@ class Main extends CI_Controller
 			$this->_user->image_name = $this->cms_function->generate_image('user', $this->_user->id);
 
 			$this->_has_image = 0;
+
+			if ($this->_user->type != 'Admin')
+			{
+				redirect(base_url() . 'pos/');
+			}
 		}
 		else
 		{
@@ -76,7 +81,7 @@ class Main extends CI_Controller
 		$total_spendings = number_format($spendings, 0, ',', '.');
 
 		// get all minimum stock
-		$this->db->where('quantity <=', 5);
+		$this->db->where('quantity <=', $this->_setting->setting__webshop_default_minimum_quantity);
 
 		if ($this->_user->location_id > 0)
 		{

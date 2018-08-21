@@ -593,7 +593,7 @@
 	.pos-table-total-display {
 		border-top: 1px solid rgba(34,36,38,.1);
 		margin: 5px;
-		padding-top: 5px;
+		padding-top: 10px;
 	}
 
 	.ui.grid > .column:not(.row) {

@@ -18,13 +18,18 @@
 
 			var nextNumber = parseInt(number) + 1;
 
-			var newItemList = '<tr id="movement-item-list-'+ nextNumber +'" class="movement-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="movement-product-selection-'+ nextNumber +'" class="ui search selection dropdown form-input"><input id="movement-product-'+ nextNumber +'" class="movement-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><input id="movement-product-quantity-'+ nextNumber +'" type="text" class="movement-item-quantity" data-number="'+ nextNumber +'" placeholder="Quantity.."></td></tr><tr><td class="movement-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
+			var newItemList = '<tr id="movement-item-list-'+ nextNumber +'" class="movement-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="movement-product-selection-'+ nextNumber +'" class="ui search remote selection dropdown form-input"><input id="movement-product-'+ nextNumber +'" class="movement-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><input id="movement-product-quantity-'+ nextNumber +'" type="text" class="movement-item-quantity" data-number="'+ nextNumber +'" placeholder="Quantity.."></td></tr><tr><td class="movement-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
 
 			$('#movement-item-list').append(newItemList);
 			$('#movement-product-quantity-'+ nextNumber).val("0");
 			$('#movement-product-selection-'+ nextNumber).dropdown('clear');
 
-			changeProduct();
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
+
 			keyUpmovement();
 		}
 
@@ -54,6 +59,12 @@
 
 		function init() {
 			$('.ui.search.dropdown.form-input').dropdown('clear');
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
 
 			$('#movement-date').datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -264,7 +275,7 @@
 												</span>
 											</td>
 											<td>
-												<div id="movement-product-selection-1" class="ui search selection dropdown form-input">
+												<div id="movement-product-selection-1" class="ui search remote selection dropdown form-input">
 													<input id="movement-product-1" class="movement-product-list-selection" data-number="1" type="hidden" class="data-important">
 													<i class="dropdown icon"></i>
 													<div class="default text">-- Select Product --</div>

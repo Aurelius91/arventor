@@ -41,11 +41,6 @@ class Pos extends CI_Controller
 		$date_display = date('Y-m-d', time());
 		$location_id = ($this->_user->location_id > 0) ? $this->_user->location_id : $this->_setting->setting__webshop_default_pos_location_id;
 
-		if ($location_id <= 0)
-		{
-			$this->db->order_by();
-		}
-
 		// get product list
 		$this->db->where('location_id', $location_id);
 		$this->db->order_by('product_name');

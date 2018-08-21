@@ -20,12 +20,18 @@
 
 			var nextNumber = parseInt(number) + 1;
 
-			var newItemList = '<tr id="purchase-item-list-'+ nextNumber +'" class="purchase-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="purchase-product-selection-'+ nextNumber +'" class="ui search selection dropdown form-input"><input id="purchase-product-'+ nextNumber +'" class="purchase-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->type; ?> - <?= $product->name; ?></div><? endforeach; ?></div></div></td><td class="td-price-quantity" style="text-align: right;"><input id="purchase-product-price-'+ nextNumber +'" type="text" class="purchase-item-price" data-number="'+ nextNumber +'" placeholder="Price.." style="text-align: right;"></td><td class="td-price-quantity" style="text-align: right;"><input id="purchase-product-quantity-'+ nextNumber +'" type="text" class="purchase-item-quantity" data-number="'+ nextNumber +'" placeholder="Quantity.." style="text-align: right;"></td><td class="td-price-quantity" style="text-align: right;"><span id="purchase-product-price-total-'+ nextNumber +'" data-number="'+ nextNumber +'" data-total="0">Rp 0</span></td></tr><tr><td class="purchase-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
+			var newItemList = '<tr id="purchase-item-list-'+ nextNumber +'" class="purchase-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="purchase-product-selection-'+ nextNumber +'" class="ui search remote selection dropdown form-input"><input id="purchase-product-'+ nextNumber +'" class="purchase-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->type; ?> - <?= $product->name; ?></div><? endforeach; ?></div></div></td><td class="td-price-quantity" style="text-align: right;"><input id="purchase-product-price-'+ nextNumber +'" type="text" class="purchase-item-price" data-number="'+ nextNumber +'" placeholder="Price.." style="text-align: right;"></td><td class="td-price-quantity" style="text-align: right;"><input id="purchase-product-quantity-'+ nextNumber +'" type="text" class="purchase-item-quantity" data-number="'+ nextNumber +'" placeholder="Quantity.." style="text-align: right;"></td><td class="td-price-quantity" style="text-align: right;"><span id="purchase-product-price-total-'+ nextNumber +'" data-number="'+ nextNumber +'" data-total="0">Rp 0</span></td></tr><tr><td class="purchase-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
 
 			$('#purchase-item-list').append(newItemList);
 			$('#purchase-product-price-'+ nextNumber).val("0");
 			$('#purchase-product-quantity-'+ nextNumber).val("1");
 			$('#purchase-product-selection-'+ nextNumber).dropdown('clear');
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
 
 			changeProduct();
 			keypressProduct();
@@ -138,6 +144,12 @@
 
 		function init() {
 			$('.ui.search.dropdown.form-input').dropdown('clear');
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
 
 			$('#purchase-date').datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -392,7 +404,7 @@
 												</span>
 											</td>
 											<td>
-												<div id="purchase-product-selection-1" class="ui search selection dropdown form-input">
+												<div id="purchase-product-selection-1" class="ui search remote selection dropdown form-input">
 													<input id="purchase-product-1" class="purchase-product-list-selection" data-number="1" type="hidden" class="data-important">
 													<i class="dropdown icon"></i>
 													<div class="default text">-- Select Product --</div>

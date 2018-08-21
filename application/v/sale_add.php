@@ -21,12 +21,18 @@
 
 			var nextNumber = parseInt(number) + 1;
 
-			var newItemList = '<tr id="sale-item-list-'+ nextNumber +'" class="sale-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="sale-product-selection-'+ nextNumber +'" class="ui search selection dropdown form-input"><input id="sale-product-'+ nextNumber +'" class="sale-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->type; ?> - <?= $product->name; ?></div><? endforeach; ?></div></div></td><td class="td-price-quantity" style="text-align: right;"><input id="sale-product-price-'+ nextNumber +'" type="text" class="sale-item-price" data-number="'+ nextNumber +'" placeholder="Price.." style="text-align: right;"></td><td class="td-price-quantity" style="text-align: right;"><input id="sale-product-quantity-'+ nextNumber +'" type="text" class="sale-item-quantity" data-number="'+ nextNumber +'" placeholder="Quantity.." style="text-align: right;"></td><td class="td-price-quantity" style="text-align: right;"><span id="sale-product-price-total-'+ nextNumber +'" data-number="'+ nextNumber +'" data-total="0">Rp 0</span></td></tr><tr><td class="sale-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
+			var newItemList = '<tr id="sale-item-list-'+ nextNumber +'" class="sale-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="sale-product-selection-'+ nextNumber +'" class="ui search remote selection dropdown form-input"><input id="sale-product-'+ nextNumber +'" class="sale-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->type; ?> - <?= $product->name; ?></div><? endforeach; ?></div></div></td><td class="td-price-quantity" style="text-align: right;"><input id="sale-product-price-'+ nextNumber +'" type="text" class="sale-item-price" data-number="'+ nextNumber +'" placeholder="Price.." style="text-align: right;"></td><td class="td-price-quantity" style="text-align: right;"><input id="sale-product-quantity-'+ nextNumber +'" type="text" class="sale-item-quantity" data-number="'+ nextNumber +'" placeholder="Quantity.." style="text-align: right;"></td><td class="td-price-quantity" style="text-align: right;"><span id="sale-product-price-total-'+ nextNumber +'" data-number="'+ nextNumber +'" data-total="0">Rp 0</span></td></tr><tr><td class="sale-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
 
 			$('#sale-item-list').append(newItemList);
 			$('#sale-product-price-'+ nextNumber).val("0");
 			$('#sale-product-quantity-'+ nextNumber).val("1");
 			$('#sale-product-selection-'+ nextNumber).dropdown('clear');
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
 
 			changeProduct();
 			keypressProduct();
@@ -207,6 +213,12 @@
 
 		function init() {
 			$('.ui.search.dropdown.form-input').dropdown('clear');
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
 
 			$('#sale-date').datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -469,7 +481,7 @@
 												</span>
 											</td>
 											<td>
-												<div id="sale-product-selection-1" class="ui search selection dropdown form-input">
+												<div id="sale-product-selection-1" class="ui search remote selection dropdown form-input">
 													<input id="sale-product-1" class="sale-product-list-selection" data-number="1" type="hidden" class="data-important">
 													<i class="dropdown icon"></i>
 													<div class="default text">-- Select Product --</div>

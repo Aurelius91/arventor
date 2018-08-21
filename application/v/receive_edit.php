@@ -7,7 +7,6 @@
 			init();
 			reset();
 			change();
-			changeProduct();
 			keyUpreceive();
 		});
 
@@ -21,13 +20,18 @@
 
 			var nextNumber = parseInt(number) + 1;
 
-			var newItemList = '<tr id="receive-item-list-'+ nextNumber +'" class="receive-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="receive-product-selection-'+ nextNumber +'" class="ui search selection dropdown form-input"><input id="receive-product-'+ nextNumber +'" class="receive-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><input id="receive-product-quantity-'+ nextNumber +'" type="text" class="receive-item-quantity" data-number="'+ nextNumber +'" placeholder="Quantity.."></td></tr><tr><td class="receive-add-product" style="cursor: pointer;" colspan="3" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
+			var newItemList = '<tr id="receive-item-list-'+ nextNumber +'" class="receive-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="receive-product-selection-'+ nextNumber +'" class="ui search remote selection dropdown form-input"><input id="receive-product-'+ nextNumber +'" class="receive-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><input id="receive-product-quantity-'+ nextNumber +'" type="text" class="receive-item-quantity" data-number="'+ nextNumber +'" placeholder="Quantity.."></td></tr><tr><td class="receive-add-product" style="cursor: pointer;" colspan="3" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
 
 			$('#receive-item-list').append(newItemList);
 			$('#receive-product-quantity-'+ nextNumber).val("0");
 			$('#receive-product-selection-'+ nextNumber).dropdown('clear');
 
-			changeProduct();
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
+
 			keyUpreceive();
 		}
 
@@ -57,14 +61,19 @@
 			$('#receive-location').change(function() {
 				$('#receive-item-list').empty();
 
-				var resetItemList = '<tr id="receive-item-list-1" class="receive-product-list" data-number="1"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem(1);"><i class="trash outline icon"></i></span></td><td><div id="receive-product-selection-1" class="ui search selection dropdown form-input"><input id="receive-product-1" class="receive-product-list-selection" data-number="1" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><span id="data-inventory-quantity-1">0</span></td><td style="text-align: right;"><input id="receive-product-quantity-1" type="text" class="receive-item-quantity" data-number="1" placeholder="Quantity.."></td><td style="text-align: right;"><span id="data-inventory-quantity-fix-1">0</span></td></tr><tr><td class="receive-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
+				var resetItemList = '<tr id="receive-item-list-1" class="receive-product-list" data-number="1"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem(1);"><i class="trash outline icon"></i></span></td><td><div id="receive-product-selection-1" class="ui search remote selection dropdown form-input"><input id="receive-product-1" class="receive-product-list-selection" data-number="1" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><span id="data-inventory-quantity-1">0</span></td><td style="text-align: right;"><input id="receive-product-quantity-1" type="text" class="receive-item-quantity" data-number="1" placeholder="Quantity.."></td><td style="text-align: right;"><span id="data-inventory-quantity-fix-1">0</span></td></tr><tr><td class="receive-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
 
 				$('#receive-item-list').append(resetItemList);
 				$('#receive-product-quantity-1').val("0");
 				$('#receive-product-selection-1').dropdown('clear');
 
-				changeProduct();
 				keyUpreceive();
+			});
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
 			});
 		}
 
@@ -122,6 +131,12 @@
 
 		function init() {
 			$('.ui.search.dropdown.form-input').dropdown('clear');
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
 
 			$('#receive-date').datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -303,7 +318,7 @@
 													</span>
 												</td>
 												<td>
-													<div id="receive-product-selection-<?= $key + 1; ?>" class="ui search selection dropdown form-input">
+													<div id="receive-product-selection-<?= $key + 1; ?>" class="ui search remote selection dropdown form-input">
 														<input id="receive-product-<?= $key + 1; ?>" class="receive-product-list-selection" data-number="<?= $key + 1; ?>" type="hidden" class="data-important">
 														<i class="dropdown icon"></i>
 														<div class="default text">-- Select Product --</div>

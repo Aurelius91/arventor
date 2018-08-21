@@ -521,6 +521,47 @@ class Product extends CI_Controller
 		echo json_encode($json);
 	}
 
+	public function ajax_search($query = '')
+	{
+		$json['success'] = true;
+
+		try
+		{
+			$query = urldecode($query);
+
+			$this->db->like('name', $query);
+			$this->db->or_like('barcode', $query);
+			$arr_product = $this->core_model->get('product');
+
+			$arr_results = array();
+
+			foreach ($arr_product as $product)
+			{
+				$result = new stdClass();
+				$result->name = $product->name;
+				$result->value = $product->id;
+				$result->text = '';
+				$result->disabled = false;
+
+				$arr_results[] = clone $result;
+			}
+
+			$json['results'] = $arr_results;
+		}
+		catch (Exception $e)
+		{
+			$json['message'] = $e->getMessage();
+			$json['success'] = false;
+
+			if ($json['message'] == '')
+			{
+				$json['message'] = 'Server error.';
+			}
+		}
+
+		echo json_encode($json);
+	}
+
 
 
 

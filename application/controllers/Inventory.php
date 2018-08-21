@@ -64,7 +64,7 @@ class Inventory extends CI_Controller
 		}
 
 		$this->db->limit($this->_setting->setting__limit_page, ($page - 1) * $this->_setting->setting__limit_page);
-		$this->db->order_by("name");
+		$this->db->order_by("quantity");
 		$arr_inventory = $this->core_model->get('inventory');
 
 		foreach ($arr_inventory as $inventory)

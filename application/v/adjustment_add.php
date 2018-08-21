@@ -21,11 +21,17 @@
 
 			var nextNumber = parseInt(number) + 1;
 
-			var newItemList = '<tr id="adjustment-item-list-'+ nextNumber +'" class="adjustment-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="adjustment-product-selection-'+ nextNumber +'" class="ui search selection dropdown form-input"><input id="adjustment-product-'+ nextNumber +'" class="adjustment-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><span id="data-inventory-quantity-'+ nextNumber +'">0</span></td><td style="text-align: right;"><input id="adjustment-product-quantity-'+ nextNumber +'" type="text" class="adjustment-item-quantity" data-number="1" placeholder="Quantity.."></td><td style="text-align: right;"><span id="data-inventory-quantity-fix-'+ nextNumber +'">0</span></td></tr><tr><td class="adjustment-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
+			var newItemList = '<tr id="adjustment-item-list-'+ nextNumber +'" class="adjustment-product-list" data-number="'+ nextNumber +'"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem('+ nextNumber +');"><i class="trash outline icon"></i></span></td><td><div id="adjustment-product-selection-'+ nextNumber +'" class="ui search remote selection dropdown form-input"><input id="adjustment-product-'+ nextNumber +'" class="adjustment-product-list-selection" data-number="'+ nextNumber +'" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><span id="data-inventory-quantity-'+ nextNumber +'">0</span></td><td style="text-align: right;"><input id="adjustment-product-quantity-'+ nextNumber +'" type="text" class="adjustment-item-quantity" data-number="1" placeholder="Quantity.."></td><td style="text-align: right;"><span id="data-inventory-quantity-fix-'+ nextNumber +'">0</span></td></tr><tr><td class="adjustment-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
 
 			$('#adjustment-item-list').append(newItemList);
 			$('#adjustment-product-quantity-'+ nextNumber).val("0");
 			$('#adjustment-product-selection-'+ nextNumber).dropdown('clear');
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
 
 			changeProduct();
 			keyUpAdjustment();
@@ -57,11 +63,17 @@
 			$('#adjustment-location').change(function() {
 				$('#adjustment-item-list').empty();
 
-				var resetItemList = '<tr id="adjustment-item-list-1" class="adjustment-product-list" data-number="1"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem(1);"><i class="trash outline icon"></i></span></td><td><div id="adjustment-product-selection-1" class="ui search selection dropdown form-input"><input id="adjustment-product-1" class="adjustment-product-list-selection" data-number="1" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><span id="data-inventory-quantity-1">0</span></td><td style="text-align: right;"><input id="adjustment-product-quantity-1" type="text" class="adjustment-item-quantity" data-number="1" placeholder="Quantity.."></td><td style="text-align: right;"><span id="data-inventory-quantity-fix-1">0</span></td></tr><tr><td class="adjustment-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
+				var resetItemList = '<tr id="adjustment-item-list-1" class="adjustment-product-list" data-number="1"><td class="td-icon"><span class="table-icon" data-content="Remove Item" onclick="removeItem(1);"><i class="trash outline icon"></i></span></td><td><div id="adjustment-product-selection-1" class="ui search remote selection dropdown form-input"><input id="adjustment-product-1" class="adjustment-product-list-selection" data-number="1" type="hidden" class="data-important"><i class="dropdown icon"></i><div class="default text">-- Select Product --</div><div class="menu"><? foreach ($arr_product as $product): ?><div class="item" data-value="<?= $product->id; ?>"><?= $product->name; ?></div><? endforeach; ?></div></div></td><td style="text-align: right;"><span id="data-inventory-quantity-1">0</span></td><td style="text-align: right;"><input id="adjustment-product-quantity-1" type="text" class="adjustment-item-quantity" data-number="1" placeholder="Quantity.."></td><td style="text-align: right;"><span id="data-inventory-quantity-fix-1">0</span></td></tr><tr><td class="adjustment-add-product" style="cursor: pointer;" colspan="5" onclick="addProduct();"><span><i class="plus circle icon"></i></span> Add Product</td></tr>';
 
 				$('#adjustment-item-list').append(resetItemList);
 				$('#adjustment-product-quantity-1').val("0");
 				$('#adjustment-product-selection-1').dropdown('clear');
+
+				$('.ui.search.remote.selection.dropdown').dropdown({
+					apiSettings: {
+						url: '<?= base_url(); ?>product/ajax_search/{query}/'
+					},
+				});
 
 				changeProduct();
 				keyUpAdjustment();
@@ -122,6 +134,12 @@
 
 		function init() {
 			$('.ui.search.dropdown.form-input').dropdown('clear');
+
+			$('.ui.search.remote.selection.dropdown').dropdown({
+				apiSettings: {
+					url: '<?= base_url(); ?>product/ajax_search/{query}/'
+				},
+			});
 
 			$('#adjustment-date').datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -294,7 +312,7 @@
 												</span>
 											</td>
 											<td>
-												<div id="adjustment-product-selection-1" class="ui search selection dropdown form-input">
+												<div id="adjustment-product-selection-1" class="ui search remote selection dropdown form-input">
 													<input id="adjustment-product-1" class="adjustment-product-list-selection" data-number="1" type="hidden" class="data-important">
 													<i class="dropdown icon"></i>
 													<div class="default text">-- Select Product --</div>
